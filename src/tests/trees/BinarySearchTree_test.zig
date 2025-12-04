@@ -1,7 +1,7 @@
 const std = @import("std");
 const testing = std.testing;
 
-const BinarySearchTree = @import("trees/BinarySearchTree.zig").BinarySearchTree;
+const BinarySearchTree = @import("../../trees/BinarySearchTree.zig").BinarySearchTree;
 
 test "BinarySearchTree insert() and contains()" {
     var tree = BinarySearchTree(i32).init(std.testing.allocator);
@@ -16,7 +16,7 @@ test "BinarySearchTree insert() and contains()" {
     try testing.expect(tree.contains(50));
     try testing.expect(tree.contains(20));
     try testing.expect(tree.contains(70));
-    try testing.expect(tree.contains(20));
+    try testing.expect(tree.contains(30));
     try testing.expect(tree.contains(40));
 
     try testing.expect(!tree.contains(100));
