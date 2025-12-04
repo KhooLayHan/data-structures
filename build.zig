@@ -54,36 +54,36 @@ pub fn build(b: *std.Build) void {
     run_step.dependOn(&run_cmd.step);
 
     // Tests
-    // const test_step = b.step("test", "Run all tests");
+    const test_step = b.step("test", "Run all tests");
 
     // Add all test files
-    // const test_files = [_][]const u8{
-    // "tests/linear/array_list_test.zig",
-    // "tests/linear/linked_list_test.zig",
-    // "tests/trees/bst_test.zig",
-    // "tests/algorithms/dijkstra_test.zig",
-    // "tests/trees/BinarySearchTree_test.zig",
-    // Add more as you create them
-    // };
+    const test_files = [_][]const u8{
+        // "tests/linear/array_list_test.zig",
+        // "tests/linear/linked_list_test.zig",
+        // "tests/trees/bst_test.zig",
+        // "tests/algorithms/dijkstra_test.zig",
+        "tests/trees/BinarySearchTree_test.zig",
+        // Add more as you create them
+    };
 
-    // for (test_files) |test_file| {
-    //     const tests = b.addTest(.{
-    //         .name = "ds-playground",
-    //         .root_module = b.createModule(.{
-    //             .root_source_file = b.path(test_file),
-    //             .target = target,
-    //             .optimize = optimize,
-    //             .imports = &.{
-    //                 .{ .name = "ds-playground", .module = mod },
-    //             },
-    //         }),
-    //     });
-    //     tests.linkLibrary(lib);
+    for (test_files) |test_file| {
+        const tests = b.addTest(.{
+            .name = "ds-playground",
+            .root_module = b.createModule(.{
+                .root_source_file = b.path(test_file),
+                .target = target,
+                .optimize = optimize,
+                .imports = &.{
+                    .{ .name = "ds-playground", .module = mod },
+                },
+            }),
+        });
+        tests.linkLibrary(lib);
 
-    //     const run_tests = b.addRunArtifact(tests);
-    //     run_tests.skip_foreign_checks = true;
-    //     test_step.dependOn(&run_tests.step);
-    // }
+        const run_tests = b.addRunArtifact(tests);
+        // run_tests.skip_foreign_checks = true;
+        test_step.dependOn(&run_tests.step);
+    }
 
     // Benchmarks
     // const bench_exe = b.addExecutable(.{
