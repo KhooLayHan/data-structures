@@ -62,7 +62,7 @@ pub fn build(b: *std.Build) void {
         // "tests/linear/linked_list_test.zig",
         // "tests/trees/bst_test.zig",
         // "tests/algorithms/dijkstra_test.zig",
-        "tests/trees/BinarySearchTree_test.zig",
+        "src/tests/trees/BinarySearchTree_test.zig",
         // Add more as you create them
     };
 
