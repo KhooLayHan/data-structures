@@ -79,6 +79,7 @@ pub fn build(b: *std.Build) void {
             }),
         });
         tests.linkLibrary(lib);
+        // tests.root_module.addImport("ds-playground", mod);
 
         const run_tests = b.addRunArtifact(tests);
         // run_tests.skip_foreign_checks = true;

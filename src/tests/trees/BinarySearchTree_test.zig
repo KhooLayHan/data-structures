@@ -1,7 +1,7 @@
 const std = @import("std");
 const testing = std.testing;
 
-const BinarySearchTree = @import("../../trees/BinarySearchTree.zig").BinarySearchTree;
+pub const BinarySearchTree = @import("ds-playground").BinarySearchTree;
 
 test "BinarySearchTree insert() and contains()" {
     var tree = BinarySearchTree(i32).init(std.testing.allocator);
