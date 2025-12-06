@@ -90,15 +90,11 @@ pub fn BinarySearchTree(comptime T: type) type {
 
             if (value < node.value) {
                 if (node.left) |left| {
-                    return self.containsNode(left, value);
-                } else {
-                    return false;
+                    return self.containsNode(left, value) orelse return false;
                 }
             } else {
                 if (node.right) |right| {
-                    return self.containsNode(right, value);
-                } else {
-                    return false;
+                    return self.containsNode(right, value) orelse return false;
                 }
             }
         }
