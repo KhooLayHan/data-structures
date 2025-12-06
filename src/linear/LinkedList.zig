@@ -150,6 +150,65 @@ pub fn LinkedList(comptime T: type) type {
             return data;
         }
 
+        pub fn removeAt(self: *Self, index: usize) !T {
+            if (index >= self.size) return error.IndexOutOfBounds;
+
+            if (index == 0) {
+                return self.popFront() orelse error.EmptyList;
+            }
+
+            var current = self.head.?;
+            var i: usize = 0;
+
+            while (i < index - 1) : (i += 1) {
+                current = current.next.?;
+            }
+
+            const to_remove = current.next.?;
+            const data = to_remove.data;
+
+            current.next = to_remove.next;
+
+            if (to_remove == self.tail.?) {
+                self.tail = current;
+            }
+
+            self.allocator.destroy(to_remove);
+            self.size -= 1;
+
+            return data;
+        }
+
+        pub fn remove(self: *Self, value: T) bool {
+            if (self.head == null) return false;
+
+            if (self.head.?.data == value) {
+                _ = self.popFront();
+                return true;
+            }
+
+            var current = self.head.?;
+
+            while (current.next) |next| {
+                if (next.data == value) {
+                    current.next = next.next;
+
+                    if (next == self.tail.?) {
+                        self.tail = current;
+                    }
+
+                    self.allocator.destroy(next);
+                    self.size -= 1;
+
+                    return true;
+                }
+
+                current = next;
+            }
+
+            return false;
+        }
+
         pub fn get(self: Self, index: usize) !T {
             if (index >= self.size) return error.IndexOutOfBounds;
 
