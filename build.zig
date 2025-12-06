@@ -8,6 +8,30 @@ pub fn build(b: *std.Build) void {
         .root_source_file = b.path("src/main.zig"),
     });
 
+    // const mod = b.createModule("ds-playground", .{
+    //     .root_source_file = b.path("src/main.zig"),
+    //     .target = target,
+    //     .optimize = optimize,
+    // });
+
+    // Static library
+    const lib = b.addLibrary(.{
+        .name = "ds-playground",
+        .linkage = .static,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/main.zig"),
+            .target = target,
+            .optimize = optimize,
+        }),
+    });
+
+    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/linear" });
+    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/trees" });
+    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/graphs" });
+    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/hash" });
+    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/algorithms" });
+    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/utils" });
+
     // Main executable for playing around
     const exe = b.addExecutable(.{
         .name = "ds-playground",
@@ -20,6 +44,7 @@ pub fn build(b: *std.Build) void {
             },
         }),
     });
+    exe.linkLibrary(lib);
     b.installArtifact(exe);
 
     // Run command
@@ -43,46 +68,54 @@ pub fn build(b: *std.Build) void {
 
     for (test_files) |test_file| {
         const tests = b.addTest(.{
+            .name = "ds-playground",
             .root_module = b.createModule(.{
                 .root_source_file = b.path(test_file),
                 .target = target,
                 .optimize = optimize,
+                .imports = &.{
+                    .{ .name = "ds-playground", .module = mod },
+                },
             }),
         });
+        tests.linkLibrary(lib);
+        // tests.root_module.addImport("ds-playground", mod);
+
         const run_tests = b.addRunArtifact(tests);
+        // run_tests.skip_foreign_checks = true;
         test_step.dependOn(&run_tests.step);
     }
 
     // Benchmarks
-    const bench_exe = b.addExecutable(.{
-        .name = "benchmarks",
-        .root_module = b.createModule(.{
-            .root_source_file = b.path("benchmarks/benchmark_runner.zig"),
-            .target = target,
-            .optimize = .ReleaseFast,
-        }),
-    });
-    const bench_run = b.addRunArtifact(bench_exe);
-    const bench_step = b.step("bench", "Run benchmarks");
-    bench_step.dependOn(&bench_run.step);
+    // const bench_exe = b.addExecutable(.{
+    //     .name = "benchmarks",
+    //     .root_module = b.createModule(.{
+    //         .root_source_file = b.path("benchmarks/benchmark_runner.zig"),
+    //         .target = target,
+    //         .optimize = .ReleaseFast,
+    //     }),
+    // });
+    // const bench_run = b.addRunArtifact(bench_exe);
+    // const bench_step = b.step("bench", "Run benchmarks");
+    // bench_step.dependOn(&bench_run.step);
 
     // Examples
-    const examples = [_]struct { name: []const u8, src: []const u8 }{
-        .{ .name = "bst-demo", .src = "examples/bst_demo.zig" },
-        .{ .name = "dijkstra-demo", .src = "examples/dijkstra_demo.zig" },
-    };
+    // const examples = [_]struct { name: []const u8, src: []const u8 }{
+    //     .{ .name = "bst-demo", .src = "examples/bst_demo.zig" },
+    //     .{ .name = "dijkstra-demo", .src = "examples/dijkstra_demo.zig" },
+    // };
 
-    for (examples) |ex| {
-        const ex_exe = b.addExecutable(.{
-            .name = ex.name,
-            .root_module = b.createModule(.{
-                .root_source_file = b.path(ex.src),
-                .target = target,
-                .optimize = optimize,
-            }),
-        });
-        const ex_run = b.addRunArtifact(ex_exe);
-        const ex_step = b.step(ex.name, b.fmt("Run {s} example", .{ex.name}));
-        ex_step.dependOn(&ex_run.step);
-    }
+    // for (examples) |ex| {
+    //     const ex_exe = b.addExecutable(.{
+    //         .name = ex.name,
+    //         .root_module = b.createModule(.{
+    //             .root_source_file = b.path(ex.src),
+    //             .target = target,
+    //             .optimize = optimize,
+    //         }),
+    //     });
+    //     const ex_run = b.addRunArtifact(ex_exe);
+    //     const ex_step = b.step(ex.name, b.fmt("Run {s} example", .{ex.name}));
+    //     ex_step.dependOn(&ex_run.step);
+    // }
 }
