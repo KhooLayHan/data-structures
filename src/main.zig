@@ -1,6 +1,7 @@
 const std = @import("std");
 
 pub const BinarySearchTree = @import("trees/BinarySearchTree.zig").BinarySearchTree;
+pub const LinkedList = @import("linear/LinkedList.zig").LinkedList;
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};

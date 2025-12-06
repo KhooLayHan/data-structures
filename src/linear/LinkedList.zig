@@ -271,10 +271,11 @@ pub fn LinkedList(comptime T: type) type {
             self.tail = self.head;
 
             while (current) |node| {
-                // const next = node.next;
+                const next = node.next;
+
                 node.next = previous;
                 previous = node;
-                current = node.next;
+                current = next;
             }
 
             self.head = previous;
