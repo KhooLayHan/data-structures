@@ -25,13 +25,6 @@ pub fn build(b: *std.Build) void {
         }),
     });
 
-    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/linear" });
-    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/trees" });
-    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/graphs" });
-    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/hash" });
-    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/algorithms" });
-    lib.root_module.addLibraryPath(.{ .cwd_relative = "src/utils" });
-
     // Main executable for playing around
     const exe = b.addExecutable(.{
         .name = "ds-playground",
