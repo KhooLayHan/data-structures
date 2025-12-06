@@ -59,7 +59,7 @@ pub fn build(b: *std.Build) void {
     // Add all test files
     const test_files = [_][]const u8{
         // "tests/linear/array_list_test.zig",
-        // "tests/linear/linked_list_test.zig",
+        "tests/linear/LinkedList_test.zig",
         // "tests/trees/bst_test.zig",
         // "tests/algorithms/dijkstra_test.zig",
         "src/tests/trees/BinarySearchTree_test.zig",
@@ -82,7 +82,7 @@ pub fn build(b: *std.Build) void {
         // tests.root_module.addImport("ds-playground", mod);
 
         const run_tests = b.addRunArtifact(tests);
-        // run_tests.skip_foreign_checks = true;
+        run_tests.skip_foreign_checks = true;
         test_step.dependOn(&run_tests.step);
     }
 
